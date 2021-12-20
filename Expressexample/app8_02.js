@@ -38,8 +38,9 @@ router.route('/process/login/:name').post(function(req, res) {
 
 app.use('/', router);
 
-app.use('/', router);
-
+app.all('*',function (req,res){
+    res.status(404).send('<h1>Error 페이지를 찾을 수 없습니다.</h1>');
+});
 // Express 서버 시작
 http.createServer(app).listen(app.get('port'), function(){
     console.log('Express server listening on port ' + app.get('port'));
