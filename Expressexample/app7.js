@@ -1,15 +1,3 @@
-/**
- * POST 방식으로 전달된 파라미터 확인하기
- *
- * (1) 웹 브라우저에서 http://localhost:3000/public/login.html 페이지 열고 요청
- * (2) 크롬 브라우저의 Postman 앱이나 기타 POST 요청 도구를 사용하여 POST 방식으로 요청
- *     GET 방식으로 요청 시에는 웹브라우저에서 아래 URL로 요청해야 함
- *         http://localhost:3000?id=test1&password=123456
- *
- * @date 2016-10-25
- * @author Mike
- */
-
 // Express 기본 모듈 불러오기
 var express = require('express')
     , http = require('http')
