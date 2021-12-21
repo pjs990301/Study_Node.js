@@ -7,14 +7,10 @@ var bodyParser = require('body-parser')
     , static = require('serve-static')
     , errorHandler = require('errorhandler');
 
-
 var expressErrorHandler = require('express-error-handler');
-
 var expressSession = require('express-session');
 
 var app = express();
-
-
 app.set('port', process.env.PORT || 3000);
 
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -29,7 +25,7 @@ app.use(expressSession({
     secret:'my key',
     resave:true,
     saveUninitialized:true
-})); 
+}));
 
 
 
@@ -40,10 +36,8 @@ var database;
 
 
 function connectDB() {
-    // 데이터베이스 연결 정보
     var databaseUrl = 'mongodb://localhost:27017/local';
 
-    // 데이터베이스 연결
     MongoClient.connect(databaseUrl, function(err, db) {
         if (err) throw err;
 
@@ -118,7 +112,64 @@ var authUser = function(database, id, password, callback) {
         }
     });
 }
+var addUser = function (database,id,password,name,callback){
+    console.log('addUser 호출됨 : '+ id + ', ' + password + ', ' +name);
 
+    var users = database.collection('users');
+
+    users.insertMany([
+        {
+            "id":id,
+            "password" : password,
+            "name":name
+        }
+    ],function (err,result){
+        if(err){
+            callback(err,null);
+            return;
+        }
+        if(result.insertedCount > 0){
+            console.log("사용자 레코드가 추가됨 :" + result.insertedCount);
+        }
+        else{
+            console.log("추가된 레코드가 없음");
+        }
+        callback(null,result);
+    });
+}
+
+router.route('/process/adduser').post(function(req, res) {
+    console.log('/process/adduser 호출됨.');
+
+    var paramId = req.body.id || req.query.id;
+    var paramPassword = req.body.password || req.query.password;
+    var paramName = req.body.name || req.query.name;
+
+    console.log('요청 파라미터 : ' + paramId + ', ' + paramPassword + ', ' + paramName);
+
+    if (database) {
+        addUser(database, paramId, paramPassword, paramName, function(err, result) {
+            if (err) {throw err;}
+
+            if (result && result.insertedCount > 0) {
+                console.dir(result);
+
+                res.writeHead('200', {'Content-Type':'text/html;charset=utf8'});
+                res.write('<h2>사용자 추가 성공</h2>');
+                res.end();
+            } else {
+                res.writeHead('200', {'Content-Type':'text/html;charset=utf8'});
+                res.write('<h2>사용자 추가  실패</h2>');
+                res.end();
+            }
+        });
+    } else {
+        res.writeHead('200', {'Content-Type':'text/html;charset=utf8'});
+        res.write('<h2>데이터베이스 연결 실패</h2>');
+        res.end();
+    }
+
+});
 
 
 var errorHandler = expressErrorHandler({
