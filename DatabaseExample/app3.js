@@ -58,11 +58,9 @@ function connectDB() {
         console.log('연결이 끊어졌습ㄴ디ㅏ. 5초 후 다시 연결합니다.');
         setInterval(connectDB, 5000);
     });
-
 }
 
 var router = express.Router();
-
 router.route('/process/login').post(function (req, res) {
     console.log('/process/login 호출됨.');
 
