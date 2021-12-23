@@ -10,6 +10,9 @@ function findAll() {
         if (err) {
             throw err;
         }
+        if(results){
+            console.log('조회된 user 문서 객체 #0 -> id : %s, name : %s',results[0]._doc.id,results[0]._doc.name);
+        }
     })
 }
 
@@ -47,7 +50,7 @@ function createUserSchema() {
     });
     console.log('UserSchema 정의');
 
-    UserModel = mongoose.model("user4", UserSchema);
+    UserModel = mongoose.model("users4", UserSchema);
     console.log('UserModel 정의');
 }
 
@@ -66,3 +69,4 @@ function connectDB() {
     });
     database.on('disconnected', connectDB);
 }
+connectDB();
