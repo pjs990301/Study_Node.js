@@ -13,7 +13,7 @@ var mysql = require('mysql');
 var pool = mysql.createPool({
     connectionLimit : 10,
     host : 'localhost',
-    user : 'hello', password : '123456', database : 'test', debug : false
+    user : 'hello', password : '12345', database : 'test', debug : false
 });
 var app = express();
 var router = express.Router();
@@ -54,10 +54,10 @@ router.route('/process/adduser').post(function(req, res) {
             if (addedUser) {
                 console.dir(addedUser);
 
-                console.log('inserted ' + result.affectedRows + ' rows');
+               /* console.log('inserted ' + result.affectedRows + ' rows');
 
                 var insertId = result.insertId;
-                console.log('추가한 레코드의 아이디 : ' + insertId);
+                console.log('추가한 레코드의 아이디 : ' + insertId);*/
 
                 res.writeHead('200', {'Content-Type':'text/html;charset=utf8'});
                 res.write('<h2>사용자 추가 성공</h2>');
