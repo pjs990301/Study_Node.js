@@ -9,6 +9,7 @@ var bodyParser = require('body-parser'),
 
 var expressErrorHandler = require('express-error-handler');
 
+var config = require('./config');
 var expressSession = require('express-session');
 var route_loader = require('./routes/route_loader');
 var database = require('./database/database');
@@ -60,10 +61,16 @@ process.on('SIGTERM',function (){
 app.on('close',function (){
     console.log("express 서버 객체가 종료됩니다");
     if(database.db){
-
+        database.db.close();
     }
 
-})
+});
+
+var server = http.createServer(app).listen(app.get('port'),function (){
+    console.log('서버 시작 포트 : ' + app.get('port'));
+
+    database.init(app,config);
+});
 
 
 
