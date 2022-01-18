@@ -11,6 +11,9 @@ var expressErrorHandler = require('express-error-handler');
 
 var expressSession = require('express-session');
 var route_loader = require('./routes/route_loader');
+var database = require('./database/database');
+
+
 
 var app = express();
 app.set('views', __dirname + './views');
@@ -39,3 +42,28 @@ var errorhandler = expressErrorHandler({
         '404':'./public/404.html'
     }
 });
+
+app.use(expressErrorHandler.httpError(404));
+app.use(errorhandler);
+
+process.on('uncaughtException',function (err){
+    console.log('uncaughtException' + err);
+    console.log('서버 프로세스 종료하지 않고 유지');
+    console.log(err.stack);
+});
+
+process.on('SIGTERM',function (){
+    console.log('프로세스 종료');
+    app.close();
+});
+
+app.on('close',function (){
+    console.log("express 서버 객체가 종료됩니다");
+    if(database.db){
+
+    }
+
+})
+
+
+
