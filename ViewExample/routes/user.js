@@ -1,10 +1,3 @@
-/*
- * 사용자 정보 처리 모듈
- * 데이터베이스 관련 객체들을 req.app.get('database')로 참조
- *
- * @date 2016-11-10
- * @author Mike
- */
 
 var login = function(req, res) {
 	console.log('user(user2.js) 모듈 안에 있는 login 호출됨.');
@@ -175,7 +168,7 @@ var listuser = function(req, res) {
 				req.app.render('listuser', context, function(err, html) {
 				    if (err) {
                         console.error('뷰 렌더링 중 에러 발생 : ' + err.stack);
-                
+
                         res.writeHead('200', {'Content-Type':'text/html;charset=utf8'});
 				        res.write('<h2>뷰 렌더링 중 에러 발생</h2>');
                         res.write('<p>' + err.stack + '</p>');

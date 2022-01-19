@@ -1,11 +1,3 @@
-/**
- * 라우팅 모듈을 로딩하여 설정
- * 
- * 라우팅 모듈 파일에 대한 정보는 config.js의 route_info 배열에 등록함
- *
- * @date 2016-11-10
- * @author Mike
- */
 
 var route_loader = {};
 
