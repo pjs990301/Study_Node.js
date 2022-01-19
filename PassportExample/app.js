@@ -32,40 +32,40 @@ app.set('port', process.env.PORT || 3000);
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
-app.use('/public',static (path.join(__dirname,'public')));
+app.use('/public', static(path.join(__dirname, 'public')));
 app.use(cookieParser());
 
 app.use(expressSession({
-    secret : 'my key',
-    resave:true,
-    saveUninitialized : true
+    secret: 'my key',
+    resave: true,
+    saveUninitialized: true
 }));
 
-route_loader.init(app,express.Router());
+route_loader.init(app, express.Router());
 
 var errorhandler = expressErrorHandler({
-    static : {
-        '404':'./public/404.html'
+    static: {
+        '404': './public/404.html'
     }
 });
 
 app.use(expressErrorHandler.httpError(404));
 app.use(errorhandler);
 
-process.on('uncaughtException',function (err){
+process.on('uncaughtException', function (err) {
     console.log('uncaughtException' + err);
     console.log('서버 프로세스 종료하지 않고 유지');
     console.log(err.stack);
 });
 
-process.on('SIGTERM',function (){
+process.on('SIGTERM', function () {
     console.log('프로세스 종료');
     app.close();
 });
 
-app.on('close',function (){
+app.on('close', function () {
     console.log("express 서버 객체가 종료됩니다");
-    if(database.db){
+    if (database.db) {
         database.db.close();
     }
 
@@ -73,37 +73,71 @@ app.on('close',function (){
 
 var LocalStrategy = require('passport-local').Strategy;
 
-passport.use('local-login',new LocalStrategy({
-    usernameFiled : 'email',
-    passwordField : 'password',
-    passReqToCallback :true
-}, function (req, email, password, done){
+passport.use('local-login', new LocalStrategy({
+    usernameFiled: 'email',
+    passwordField: 'password',
+    passReqToCallback: true
+}, function (req, email, password, done) {
     console.log('passport local-login 호출 : ' + email + ", " + password);
 
     var database = app.get('database');
-    database.UserModel.findOne({'email':email},function (err,user){
-        if(err) {return done(err);}
+    database.UserModel.findOne({'email': email}, function (err, user) {
+        if (err) {
+            return done(err);
+        }
 
-        if(!user){
+        if (!user) {
             console.log('계정이 일치하지 않음');
-            return done (null, false, req.flash('loginMessage','등록된 계정이 없습니다.'));
+            return done(null, false, req.flash('loginMessage', '등록된 계정이 없습니다.'));
 
         }
-        var authenticated = user.authenticate(password,user._doc.salt,user._doc.hashed_password);
-        if(!authenticated){
+        var authenticated = user.authenticate(password, user._doc.salt, user._doc.hashed_password);
+        if (!authenticated) {
             console.log('비밀번호 일치하지 않음');
-            return  done(null,false, req.flash('loginMessage','비밀번호가 일치하지 않음'));
+            return done(null, false, req.flash('loginMessage', '비밀번호가 일치하지 않음'));
         }
         console.log('계정과 비밀번호가 일치');
-        return done(null,user);
+        return done(null, user);
+    });
+}));
+
+passport.use('local-signup', new LocalStrategy({
+    usernameField: 'email',
+    passwordField: 'password',
+    passReqToCallback: true
+}, function (req, email, password, done) {
+    var paramName = req.body.name || req.query.name;
+    console.log('passport local-signup 호출 : ' + email + ", " + password + ", " + paramName);
+
+    process.nextTick(function () {
+        var database = app.get('database');
+        database.UserModel.findOne({'email': email}, function (err, user) {
+            if (err) {
+                return done(err);
+            }
+            if (user) {
+                console.log('기존 계정이 있음');
+                return done(null, false, req.flash('signupMessage', '계정이 이미 존재'));
+            } else {
+                var user = new database.UserModel({'email': email, 'password': password, 'name': paramName});
+
+                user.save(function (err) {
+                    if (err) {
+                        throw  err;
+                    }
+                    console.log("사용자 데이터 추가함");
+                    return done(null, user);
+                });
+            }
+        });
     });
 }));
 
 
-var server = http.createServer(app).listen(app.get('port'),function (){
+var server = http.createServer(app).listen(app.get('port'), function () {
     console.log('서버 시작 포트 : ' + app.get('port'));
 
-    database.init(app,config);
+    database.init(app, config);
 });
 
 
