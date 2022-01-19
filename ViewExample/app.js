@@ -17,7 +17,7 @@ var database = require('./database/database');
 
 
 var app = express();
-app.set('views', __dirname + './views');
+app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 console.log('뷰 엔진이 ejs로 설정');
 
