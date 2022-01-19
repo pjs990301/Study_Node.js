@@ -14,11 +14,16 @@ var expressSession = require('express-session');
 var route_loader = require('./routes/route_loader');
 var database = require('./database/database');
 
-var
+var passport = require('passport');
+var flash = require('connect-flash');
 
 var app = express();
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(flash());
+
 console.log('뷰 엔진이 ejs로 설정');
 
 console.log('config.server_port : %d', config.server_port);
