@@ -145,7 +145,8 @@ passport.deserializeUser(function (user,done){
 
 var router = express.Router();
 
-router_loader.init(app,router);
+var route_loader = require('./routes/route_loader');
+route_loader.init(app,router);
 router.route('/').get(function(req, res) {
     console.log('/ 패스 요청됨.');
     res.render('index.ejs');

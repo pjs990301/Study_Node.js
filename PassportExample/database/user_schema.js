@@ -69,10 +69,6 @@ Schema.createSchema = function(mongoose) {
 	})
 	
 	// 필수 속성에 대한 유효성 확인 (길이값 체크)
-	UserSchema.path('id').validate(function (id) {
-		return id.length;
-	}, 'id 칼럼의 값이 없습니다.');
-
 	UserSchema.path('email').validate(function (email){
 		return email.length;
 	}, 'email 칼럼의 값이 없습니다.');
