@@ -14,7 +14,7 @@ var expressSession = require('express-session');
 var route_loader = require('./routes/route_loader');
 var database = require('./database/database');
 
-
+var
 
 var app = express();
 app.set('views', __dirname + '/views');
