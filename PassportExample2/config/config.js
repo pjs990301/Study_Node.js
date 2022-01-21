@@ -12,8 +12,8 @@ module.exports = {
 	route_info: [
 	],
 	facebook: {		// passport facebook
-		clientID: '466838108359819',
-		clientSecret: '21d64911f1538db04473163e275e62d5',
+		clientID: 'id',
+		clientSecret: 'secret',
 		callbackURL: 'http://localhost:3000/auth/facebook/callback'
 	},
 	twitter: {		// passport twitter
