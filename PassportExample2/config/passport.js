@@ -1,12 +1,3 @@
-/**
- * 패스포트 기본 설정 파일
- * 
- * 패스포트 설정을 위한 기본 파일로 passport 폴더에 있는 설정 파일들을 사용함
- * serializeUser, deserializeUser 메소드 설정
- *
- * @date 2016-11-10
- * @author Mike
- */
 
 var local_login = require('./passport/local_login');
 var local_signup = require('./passport/local_signup');
