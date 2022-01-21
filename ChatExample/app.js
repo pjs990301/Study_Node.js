@@ -137,3 +137,6 @@ var server = http.createServer(app).listen(app.get('port'), function(){
 	database.init(app, config);
    
 });
+
+var io = socketio.listen(server);
+console.log('socket.io 요청을 받을 준비 완료');
