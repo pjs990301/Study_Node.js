@@ -89,6 +89,7 @@ configPassport(app, passport);
 
 // 패스포트 라우팅 설정
 var userPassport = require('./routes/user_passport');
+const {shallowCopy} = require("ejs/lib/utils");
 userPassport(router, passport);
 
 
@@ -137,3 +138,11 @@ var server = http.createServer(app).listen(app.get('port'), function () {
 
 var io = socketio.listen(server);
 console.log('socket.io 요청을 받을 준비 완료');
+
+io.sockets.on('connection',function(socket){
+	console.log('connection info : ', socket.request.connection._peername);
+
+	socket.remoteAddress = socket.request.connection._peername.address;
+	socket.remotePort = socket.connection._peername.port;
+
+});
