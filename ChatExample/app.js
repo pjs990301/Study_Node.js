@@ -30,12 +30,13 @@ var database = require('./database/database');
 // 모듈로 분리한 라우팅 파일 불러오기
 var route_loader = require('./routes/route_loader');
 
- 
+var socketio = new require('socket.io');
+
+var cors = require('cors');
 
 
 // 익스프레스 객체 생성
 var app = express();
-
 
 //===== 뷰 엔진 설정 =====//
 app.set('views', __dirname + '/views');
@@ -74,7 +75,9 @@ app.use(expressSession({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
- 
+
+app.use(cors());
+
 
 
 //라우팅 정보를 읽어들여 라우팅 설정
