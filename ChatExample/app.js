@@ -136,15 +136,27 @@ var server = http.createServer(app).listen(app.get('port'), function () {
 
 });
 
-var io = socketio.listen(server);
+/*const io = require('socket.io')(http);
 console.log('socket.io 요청을 받을 준비 완료');
 
-io.sockets.on('connection',function(socket){
-	console.log('connection info : ', socket.request.connection._peername);
 
-	socket.remoteAddress = socket.request.connection._peername.address;
-	socket.remotePort = socket.connection._peername.port;
+io.on('connect', (socket) => {
+    console.log('connection info : ', socket.request.connection._peername);
 
+    socket.remoteAddress = socket.request.connection._peername.address;
+    socket.remotePort = socket.connection._peername.port;
+});*/
+
+var io = socketio.listen(server);
+console.log('socket.io 요청을 받아들일 준비가 되었습니다.');
+
+//클라이언트가 연결했을 때의 이벤트 처리
+io.sockets.on('connection', function(socket) {
+    console.log('connection info :', socket.request.connection._peername);
+
+    // 소켓 객체에 클라이언트 Host, Port 정보 속성으로 추가
+    socket.remoteAddress = socket.request.connection._peername.address;
+    socket.remotePort = socket.request.connection._peername.port;
 });
 
 

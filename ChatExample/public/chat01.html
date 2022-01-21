@@ -4,7 +4,7 @@
 		<meta charset="UTF-8">
 		<title>채팅 클라이언트 01</title>
 		
-		<script src="jquery-3.1.1.min.js"></script>      
+		<script src="jquery-3.1.1.min.js"></script>
 		<script src="socket.io.js"></script>
         
         <script>
@@ -20,7 +20,6 @@
 					
                     host = $('#hostInput').val();
                     port = $('#portInput').val();
-
                     connectToServer();
                 });
 
@@ -32,7 +31,6 @@
                 var options = {'forceNew':true};
                 var url = 'http://' + host + ':' + port;
                 socket = io.connect(url, options);
-
                 socket.on('connect', function() {
                 	println('웹소켓 서버에 연결되었습니다. : ' + url);
                 });
