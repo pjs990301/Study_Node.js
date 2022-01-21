@@ -8,7 +8,7 @@ module.exports = {
 	],
 	facebook: {		// passport facebook
 		clientID: 'id',
-		clientSecret: 'secret',
+		clientSecret: 'pw',
 		callbackURL: 'http://localhost:3000/auth/facebook/callback'
 	},
 	twitter: {		// passport twitter
