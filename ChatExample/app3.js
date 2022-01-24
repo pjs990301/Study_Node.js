@@ -199,7 +199,7 @@ io.sockets.on('connection', function(socket) {
 // 응답 메시지 전송 메소드
 function sendResponse(socket, command, code, message) {
     var statusObj = {command: command, code: code, message: message};
-    socket.emit('response', statusObj);
+    socket.emit('response', statusObj);₩
 }
 
 
