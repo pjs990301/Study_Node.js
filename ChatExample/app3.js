@@ -140,7 +140,7 @@ var io = socketio.listen(server);
 console.log('socket.io 요청을 받아들일 준비가 되었습니다.');
 
 //클라이언트가 연결했을 때의 이벤트 처리
-io.sockets.on('connection', function(socket) {
+io.socket.on('connection', function (socket) {
     console.log('connection info :', socket.request.connection._peername);
 
     // 소켓 객체에 클라이언트 Host, Port 정보 속성으로 추가
@@ -148,15 +148,47 @@ io.sockets.on('connection', function(socket) {
     socket.remotePort = socket.request.connection._peername.port;
 
     // 'message' 이벤트를 받았을 때의 처리
-    socket.on('message', function(message) {
+    socket.on('message', function (message) {
         console.log('message 이벤트를 받았습니다.');
         console.dir(message);
 
-        if(message.recepient =='ALL') {
+        if (message.recepient == 'ALL') {
             // 나를 포함한 모든 클라이언트에게 메시지 전달
             console.dir('나를 포함한 모든 클라이언트에게 message 이벤트를 전송합니다.')
             io.sockets.emit('message', message);
         }
+        else {
+            if(login_ids[message.recepient]){
+                io.sockets.connected[login_ids[message.recepient]].emit('message',message);
+
+                sendResponse(socket,'message','200','메세지 전송');
+            }
+            else
+                sendResponse(socket,'login','400','상대방 로그인 ID 찾기 불가');
+
+        }
+    });
+    socket.on('login', function (login) {
+        console.log('login 이벤트를 받음');
+        console.dir(login);
+
+        console.log('접속 소켓 id : ' + socket.id());
+        login_ids[login.id] = socket.id;
+        socket.login_id = login.id;
+
+        console.log('접속 클라 ID 갯수 : %d', Object.keys(login_ids).length);
+
+        sendResponse(socket, 'login', 200, '로그인 완료');
     });
 
+
 });
+
+var login_ids = {};
+
+function sendResponse(socket, command, code, message) {
+    var statusObj = {command: command, code: code, message :message};
+    socket.emit('response',statusObj);
+
+}
+
