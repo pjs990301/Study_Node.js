@@ -127,7 +127,7 @@ app.on('close', function () {
     }
 });
 
-// 시작된 서버 객체를 리턴받도록 합니다. 
+// 시작된 서버 객체를 리턴받도록 합니다.
 var server = http.createServer(app).listen(app.get('port'), function () {
     console.log('서버가 시작되었습니다. 포트 : ' + app.get('port'));
 
@@ -180,15 +180,19 @@ io.sockets.on('connection', function (socket) {
             console.dir('나를 포함한 모든 클라이언트에게 message 이벤트를 전송합니다.')
             io.sockets.emit('message', message);
         } else {
-            // 일대일 채팅 대상에게 메시지 전달
-            if (login_ids[message.recepient]) {
-                io.sockets.connected[login_ids[message.recepient]].emit('message', message);
-
-                // 응답 메시지 전송
-                sendResponse(socket, 'message', '200', '메시지를 전송했습니다.');
-            } else {
-                // 응답 메시지 전송
-                sendResponse(socket, 'login', '404', '상대방의 로그인 ID를 찾을 수 없습니다.');
+            if (message.command == 'chat') {
+                if (login_ids[message.recepient]) {
+                    io.sockets.connected[login_ids[message.recepient]].emit('message', message);
+                    // 응답 메시지 전송
+                    sendResponse(socket, 'message', '200', '메시지를 전송했습니다.');
+                } else {
+                    // 응답 메시지 전송
+                    sendResponse(socket, 'login', '404', '상대방의 로그인 ID를 찾을 수 없습니다.');
+                }
+            }
+            else if(message.command == 'groupchat'){
+                io.sockets.in(message.recepient).emit('message',message);
+                sendResponse(socket,'message','200','방['+message.recepient +']의 모든 사용자에게 메세지를 전송했습니다.');
             }
         }
     });
@@ -223,7 +227,14 @@ io.sockets.on('connection', function (socket) {
             } else {
                 console.log('방이 만들어져 있지 않습니다.');
             }
-        } else if
+        } else if (room.command == 'join') {
+            socket.join(room.roomId);
+            sendResponse(socket, 'room', '200', '방에 입장하였습니다.');
+        } else if (room.command == 'leave') {
+            socket.leave(room.roomId);
+            sendResponse(socket, 'room', '200', '방에서 나갔습니니다.');
+
+        }
         var roomList = getRoomList();
 
         var output = {command: 'list', rooms: roomList};
