@@ -223,7 +223,7 @@ io.sockets.on('connection', function (socket) {
             } else {
                 console.log('방이 만들어져 있지 않습니다.');
             }
-        }
+        } else if
         var roomList = getRoomList();
 
         var output = {command: 'list', rooms: roomList};
