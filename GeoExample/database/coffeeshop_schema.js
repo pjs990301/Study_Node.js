@@ -13,4 +13,13 @@ Schema.createSchema = function (mongoose){
         created_at : {type : Date, index : {unique : false}, 'default' : Date.now},
         updated_at : {type : Date, index : {unique : false}, 'default' : Date.now}
     });
+
+    CoffeeShopSchema.index({geometry: '2dsphere'});
+
+    CoffeeShopSchema.static('findAll',function (callback){
+        return this.find({},callback);
+    });
+
 }
+
+
