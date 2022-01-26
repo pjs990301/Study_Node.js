@@ -33,7 +33,7 @@ var route_loader = require('./routes/route_loader');
 var handler_loader = require('./handlers/handler_loader');
 var jayson = require('jayson');
 var jsonrpc_api_path = config.jsonrpc_api_path || '/api';
-handler_loader.init(jayson, app, jsonrpc_api_path);
+//handler_loader.init(jayson, app, jsonrpc_api_path);
 
 console.log('JSON-RPC를 [' + jsonrpc_api_path + '] 패스에서 사용하도록 설정함.');
 
