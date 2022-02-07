@@ -16,7 +16,10 @@ module.exports = {
         }
 
     ],
-    route_info: [],
+    route_info: [
+        {file: './coffeeshop', path: '/process/addcoffeeshop', method: 'add', type: 'post'},
+        {file: './coffeeshop', path: '/process/listcoffeeshop', method: 'list', type: 'post'}
+    ],
     facebook: {		// passport facebook
         clientID: 'id',
         clientSecret: 'pw',
