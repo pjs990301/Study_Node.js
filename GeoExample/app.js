@@ -1,20 +1,20 @@
 // Express 기본 모듈 불러오기
 var express = require('express')
-  , http = require('http')
-  , path = require('path');
+	, http = require('http')
+	, path = require('path');
 
 // Express의 미들웨어 불러오기
 var bodyParser = require('body-parser')
-  , cookieParser = require('cookie-parser')
-  , static = require('serve-static')
-  , errorHandler = require('errorhandler');
+	, cookieParser = require('cookie-parser')
+	, static = require('serve-static')
+	, errorHandler = require('errorhandler');
 
 // 에러 핸들러 모듈 사용
 var expressErrorHandler = require('express-error-handler');
 
 // Session 미들웨어 불러오기
 var expressSession = require('express-session');
-  
+
 
 //===== Passport 사용 =====//
 var passport = require('passport');
@@ -30,7 +30,7 @@ var database = require('./database/database');
 // 모듈로 분리한 라우팅 파일 불러오기
 var route_loader = require('./routes/route_loader');
 
- 
+
 
 
 // 익스프레스 객체 생성
@@ -46,7 +46,7 @@ console.log('뷰 엔진이 ejs로 설정되었습니다.');
 //===== 서버 변수 설정 및 static으로 public 폴더 설정  =====//
 console.log('config.server_port : %d', config.server_port);
 app.set('port', process.env.PORT || 3000);
- 
+
 
 // body-parser를 이용해 application/x-www-form-urlencoded 파싱
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -56,7 +56,7 @@ app.use(bodyParser.json())
 
 // public 폴더를 static으로 오픈
 app.use('/public', static(path.join(__dirname, 'public')));
- 
+
 // cookie-parser 설정
 app.use(cookieParser());
 
@@ -74,7 +74,7 @@ app.use(expressSession({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
- 
+
 
 
 //라우팅 정보를 읽어들여 라우팅 설정
@@ -94,9 +94,9 @@ userPassport(router, passport);
 
 //===== 404 에러 페이지 처리 =====//
 var errorHandler = expressErrorHandler({
- static: {
-   '404': './public/404.html'
- }
+	static: {
+		'404': './public/404.html'
+	}
 });
 
 app.use( expressErrorHandler.httpError(404) );
@@ -109,14 +109,14 @@ app.use( errorHandler );
 process.on('uncaughtException', function (err) {
 	console.log('uncaughtException 발생함 : ' + err);
 	console.log('서버 프로세스 종료하지 않고 유지함.');
-	
+
 	console.log(err.stack);
 });
 
 // 프로세스 종료 시에 데이터베이스 연결 해제
 process.on('SIGTERM', function () {
-    console.log("프로세스가 종료됩니다.");
-    app.close();
+	console.log("프로세스가 종료됩니다.");
+	app.close();
 });
 
 app.on('close', function () {
@@ -132,5 +132,5 @@ var server = http.createServer(app).listen(app.get('port'), function(){
 
 	// 데이터베이스 초기화
 	database.init(app, config);
-   
+
 });
